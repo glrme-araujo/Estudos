@@ -1,0 +1,210 @@
+---
+title: "Data Wrangling"
+output: html_document
+date: "2025-01-20"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data Wrangling
+
+Técnicas para manipular conjunto de dados.
+
+## Instalação de bibliotecas
+
+-   **tidyverse** - Biblioteca para manipulação de dados.
+
+-   **readxl** - Biblioteca para manipulação de arquivos em Excel.
+
+```{r lib,echo = TRUE}
+library(readxl) 
+library(tidyverse) 
+```
+
+## Ler arquivos
+
+```{r read, echo=TRUE}
+dataset_inicial <- read_excel("(1.2) Dataset Aula Data Wrangling.xls")
+dataset_merge <- read_excel("(1.3) Dataset Aula Data Wrangling (Join).xls")
+
+```
+
+## Formas de visualizar os dados
+
+-   **view ()** - Visualiza em outra aba.
+
+-   **head()** - Visualiza as 5 primeiras linhas.
+
+-   **str()** ou **glimpse()** - Visualiza a estrutura .
+
+-   **dim()** - Visualiza a dimensão.
+
+-   **names()** - Visualiza os nomes das variáveis.
+
+-   **tail()** - Visualiza as 5 ultimas.
+
+```{r visu, echo = TRUE}
+head(dataset_inicial)
+```
+
+### Visualizar variável desejada
+
+Utilizando '\$' podemos visualizar alguma variavel dentro do conjuto de dados.
+
+```{r,echo=FALSE}
+dataset_inicial$Estudante
+```
+
+### Trocar nomes das variáveis
+
+-   rename()
+
+Abaixo vemos como trocar o nome de todas as variáveis.
+
+```{r}
+novos_nomes <- c("Observações",
+                 "Tempo para chegar",
+                 "Distância percorrida",
+                 "Semáforos",
+                 "Período",
+                 "Perfil")
+
+names(dataset_inicial) <- novos_nomes
+```
+
+E aqui temos outra maneira de trocar todos os nomes, ou apenas alguns.
+
+```{r}
+dataset_inicial<- rename(dataset_inicial, 
+                    observacoes = "Observações",
+                    tempo = "Tempo para chegar",
+                    distancia = "Distância percorrida",
+                    semaforos = "Semáforos",
+                    periodo = "Período",
+                    perfil = "Perfil")
+head(dataset_inicial)
+```
+
+## Selecionar, Reposicionar e Extrair
+
+Podemos extrair dados e também reposicionar as variáveis utilzando funções ou não. A ordem das variáveis ficará na ordem em que mencionar elas na função.
+
+```{r}
+selecao_1 <- dataset_inicial[,c("observacoes","tempo")] # critérios após a vírgula
+selecao_2 <- dataset_inicial[,1:3] # selecionando pela posição das colunas de 1 a 3
+selecao_3 <- dataset_inicial[,c(1:3, 5)] # pulando posições
+```
+
+### Select()
+
+A função **Select()** ajuda nisso. A ordem das variáveis ficará na ordem em que mencionar elas na função.
+
+```{r}
+base_select_1 <- select(dataset_inicial, observacoes, tempo) # especificando
+base_select_2 <- select(dataset_inicial, -perfil, -semaforos) # todas menos algumas
+base_select_3 <- select(dataset_inicial, observacoes:distancia) # de uma a outra
+base_select_4 <- select(dataset_inicial, starts_with("per")) # para algum início comum
+base_select_5 <- select(dataset_inicial, ends_with("o")) # para algum final comum
+```
+
+```{r}
+dataset_inicial %>% select(observacoes, perfil, everything())
+
+```
+
+### Arrange()
+
+Permite rearranjar a ordem das observações. Por exemplo, deixar em ordem crescente.
+
+```{r}
+arrange(dataset_inicial,distancia,semaforos)
+```
+
+### Relocate()
+
+Realoca a posição das variáveis.
+
+Perfil depois de oberservações.
+
+```{r}
+dataset_inicial %>% relocate(perfil, .after = observacoes)
+```
+
+### Mutate()
+
+Função "mutate": apresenta duas utilidades principais.
+
+1\. Inclui variáveis no dataset, mantendo as existentes.
+
+2\. Transforma o conteúdo das variáveis.
+
+Abaixo estamos adicionando **"variavel_nova_1"** e **"variavel_nova_2"**, e tambem criando a coluna **"temp_novo"** no "**datasaet_inicial"** e atribuindo a variavel base_inclui.
+
+```{r}
+variavel_nova_1 <- c(1,2,3,4,5,6,7,8,9,10)
+variavel_nova_2 <- c(11:20)
+
+base_inclui <- mutate(dataset_inicial,
+                      variavel_nova_1, 
+                      variavel_nova_2,
+                      temp_novo = tempo*2)
+head(base_inclui)
+```
+
+### Replace ou Recode
+
+Função que permite alterar os valores das observações.
+
+```{r}
+base_texto_1 <- mutate(dataset_inicial, 
+                       semaforos = replace(semaforos, semaforos==0, "Zero"),
+                       semaforos = replace(semaforos, semaforos==1, "Um"),
+                       semaforos = replace(semaforos, semaforos==2, "Dois"),
+                       semaforos = replace(semaforos, semaforos==3, "Três"))
+head(base_texto_1)
+
+base_texto_2 <- mutate(dataset_inicial,
+                       semaforos = recode(semaforos,
+                                          `0` = "Zero",
+                                          `1` = "Um", 
+                                          `2` = "Dois",
+                                          `3` = "Três"))
+```
+
+### Transmute
+
+Inclui variáveis no dataset, excluindo as restantes.
+
+Abaixo estamos selecionando apenas as variaveis **"observacoes", "tempo**" do dataset_inicial e adicionando **"variavel_nova_1", "variavel_nova_2"** á variavel base_transumte.
+
+```{r}
+base_transumte <- transmute(dataset_inicial,
+                           observacoes, tempo,
+                           variavel_nova_1, variavel_nova_2)
+head(base_transumte)
+```
+
+### Pull()
+
+Executa trabalho semelhante ao "select", porém gera um vetor.
+
+```{r}
+vetor_pull <- dataset_inicial %>% pull(var = 3)
+
+
+```
+
+### Filter()
+
+Filtra as observações de acordo com os critérios escolhidos.
+
+```{r}
+base_filtro_1 <- filter(dataset_inicial, tempo > 20)
+base_filtro_2 <- filter(dataset_inicial, tempo > 20 & distancia < 25)
+base_filtro_3 <- filter(dataset_inicial, periodo == "Manhã")
+base_filtro_4 <- filter(dataset_inicial, periodo != "Manhã" & between(tempo, 20, 50))
+base_filtro_5 <- filter(dataset_inicial, tempo <= 15 | periodo == "Tarde")
+base_filtro_6 <- filter(dataset_inicial, tempo > mean(tempo))
+```
