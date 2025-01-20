@@ -14,14 +14,22 @@
 Agora voce baixou o repositório na pasta que criou
 
 ## Enviar arquivos para o repositório (PUSH)
-1-- de um 'git bash here' no repostorio 
-2-- git status (para ver as atualizações dos arquivos)
-3-- git add . (adiciona tudo)
-4-- git commit -m "comentario"
-5-- git branch -M main
-6-- git push -u origin
+
+1- de um 'git bash here' no repostorio 
+
+2- git status (para ver as atualizações dos arquivos)
+
+3- git add . (adiciona tudo)
+
+4- git commit -m "comentario"
+
+5- git branch -M main
+
+6- git push -u origin
  
 ## Baixar arquivos do repositóri (PULL)
-1-- de um 'git bash here' no repostorio 
-2-- git status (para ver as atualizações dos arquivos)
-3-- git pull
+1- de um 'git bash here' no repostorio 
+
+2- git status (para ver as atualizações dos arquivos)
+
+3- git pull
