@@ -12,5 +12,8 @@ Agora voce baixou o repositório na pasta que criou
 ## Enviar arquivos para o repositório (PUSH)
 1 -- de um 'git bash here' no repostorio 
 2 -- git status (para ver as atualizações dos arquivos)
-3 -- git commit -m "comentario"
-4 -- git push 
+3 -- git add . (adiciona tudo)
+4 -- git commit -m "comentario"
+5 -- git branch -M main
+6 -- git push -u origin
+ 
