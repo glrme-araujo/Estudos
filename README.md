@@ -17,3 +17,7 @@ Agora voce baixou o repositório na pasta que criou
 5 -- git branch -M main
 6 -- git push -u origin
  
+## Baixar arquivos do repositóri (PULL)
+1 -- de um 'git bash here' no repostorio 
+2 -- git status (para ver as atualizações dos arquivos)
+3 -- git pull
