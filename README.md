@@ -2,9 +2,13 @@
 
 ## Clonar Repositório (CLONE)
 1- Crie uma pasta 
+
 2- De um 'git bash here'
+
 3- git config --global user.name "nome de usario"
+
 4- git config --global user.email "email"
+
 5- git clone endereço da repositorio no git
 
 Agora voce baixou o repositório na pasta que criou
